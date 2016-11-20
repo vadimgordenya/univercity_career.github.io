@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html ng-app="sampleApp">
+<head>
+
+    <title>Регистрация</title>
+
+    <script src="angular.js"></script>
+    <link href="bootstrap-theme.css" rel="stylesheet" />
+    <link href="bootstrap.css" rel="stylesheet" />
+
+    <script>
+        angular.module("sampleApp", [])
+            .controller("defaultCtrl", function ($scope) {
+                $scope.addNewUser = function (userDetails) {
+                    $scope.message = userDetails.firstName + " " +  userDetails.secondName 
+                        + " (" + userDetails.email + ") (" + userDetails.agreed + ")";
+                }
+
+                $scope.message = "Ready";
+
+                // Для многих элементов форм ошибки могут быть одинаковыми, для того чтобы избавиться от дублирования кода
+                // можно использовать методы подобные getError
+                $scope.getError = function (error) {
+                    if (angular.isDefined(error)) {
+                        if (error.required) {
+                            return "Поле не должно быть пустым";
+                        } else if (error.email) {
+                            return "Введите праивльный email";
+
+                        }
+                    }
+                }
+            });
+    </script>
+
+    <style>
+        form .ng-invalid-required.ng-dirty {
+            background-color: lightpink;
+        }
+
+        form .ng-invalid-email.ng-dirty {
+            background-color: lightgoldenrodyellow;
+        }
+
+        form .ng-valid.ng-dirty {
+            background-color: lightgreen;
+        }
+
+        span.summary.ng-invalid {
+            color: red;
+            font-weight: bold;
+        }
+
+        span.summary.ng-valid {
+            color: green;
+        }
+
+        div.error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="panel" style="width:300px" ng-controller="defaultCtrl">
+        <form name="myForm" novalidate ng-submit="addNewUser(newUser)">
+            <div class="well">
+                <div class="form-group">
+                <div class="form-group">
+                    <label>Страна:</label>
+                    <select name="Country" id="" required>
+                        <option value="">Беларусь</option>
+                        <option value="">Россия</option>
+                        <option value="">Украина</option>
+                        <option value="">Польша</option>
+                    </select>
+                </div>
+                    <label>Имя:</label>
+                    <input name="userName" type="text" class="form-control" required ng-model="newUser.firstName">
+                </div>
+                <div class="form-group">
+                    <label>Фамилия:</label>
+                    <input name="userName" type="text" class="form-control" required ng-model="newUser.secondName">
+                </div>
+                <div class="form-group">
+                    <label>Отчество:</label>
+                    <input name="userName" type="text" class="form-control" required ng-model="newUser.lastName">
+                </div>
+                <div class="form-group">
+                    <label>Дата рождения:</label>
+                    <input name="userName" type="date" class="form-control" required ng-model="newUser.Data">
+                </div>
+
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input name="userEmail" type="email" class="form-control" required ng-model="newUser.email">
+
+                    <!--
+                        Если userName был изменен myForm.userEmail.$dirty == true и его формат не правильный myForm.userEmail.$invalid == true
+                        Отобразить div в котором вывести сообщение соответствующее типу ошибки
+                    -->
+                    <div class="error" ng-show="myForm.userEmail.$invalid && myForm.userEmail.$dirty">
+                        {{getError(myForm.userEmail.$error)}}
+                    </div>
+
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input name="agreed" type="checkbox" ng-model="newUser.agreed" required>
+                        Согласен с условиями использования
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block" ng-disabled="myForm.$invalid">
+                    OK
+                </button>
+            </div>
+            <div class="well">
+                Message: {{message}}
+                <div>
+                    Valid:
+                    <span class="summary" ng-class="myForm.$valid ? 'ng-valid' : 'ng-invalid'">
+                        {{myForm.$valid}}
+                    </span>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+
