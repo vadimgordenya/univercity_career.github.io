@@ -2513,6 +2513,12 @@ table th[class*="col-"] {
   .content {
     margin-top: 20px;
   }
+  .button {
+    margin-top: 10px;
+  }
+  .form__registr {
+    margin-left: -100px;
+  }
   .table-responsive {
     width: 100%;
     margin-bottom: 15px;
